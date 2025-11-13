@@ -4,6 +4,7 @@ interface TimeEvent {
   id: string;
   title: string;
   date: string;
+  dateType: 'solar' | 'lunar';
   type: 'countdown' | 'anniversary';
   category: string;
   description?: string;
@@ -67,6 +68,7 @@ export const useAppStore = create<AppState>((set) => ({
       id: '1',
       title: '春节',
       date: '2025-01-29',
+      dateType: 'solar',
       type: 'countdown',
       category: '节日',
       description: '与家人团聚的美好时光',
@@ -80,6 +82,7 @@ export const useAppStore = create<AppState>((set) => ({
       id: '2',
       title: '恋爱纪念日',
       date: '2023-02-14',
+      dateType: 'solar',
       type: 'anniversary',
       category: '爱情',
       description: '我们相遇的那一天',
@@ -92,6 +95,7 @@ export const useAppStore = create<AppState>((set) => ({
       id: '3',
       title: '毕业旅行',
       date: '2025-06-15',
+      dateType: 'solar',
       type: 'countdown',
       category: '旅行',
       description: '和朋友们一起的毕业之旅',
@@ -148,6 +152,7 @@ export const useAppStore = create<AppState>((set) => ({
   addEvent: (event) => set((state) => ({
     events: [...state.events, {
       ...event,
+      dateType: event.dateType || 'solar', // 默认为公历
       id: Date.now().toString(),
       createdAt: new Date().toISOString()
     }]

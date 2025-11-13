@@ -229,6 +229,11 @@ body {
   .animate-bounce-soft {
     animation: bounce-soft 2s infinite;
   }
+
+  /* 滑入动画 */
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
   
   /* 移动端优化 */
   .touch-manipulation {
@@ -393,6 +398,17 @@ body {
 @keyframes bounce-soft {
   0%, 100% { transform: translateY(-5%); }
   50% { transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* 响应式设计 */

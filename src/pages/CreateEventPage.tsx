@@ -3,6 +3,7 @@ import { useAppStore } from '../store/appStore';
 import { ArrowLeft, Calendar, Clock, Heart, Camera, Users, Bell, Save, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Illustrations from '../components/Illustrations';
+import DatePickerModal from '../components/DatePickerModal';
 
 const CreateEventPage: React.FC = () => {
   const { addEvent } = useAppStore();
@@ -11,6 +12,7 @@ const CreateEventPage: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     date: '',
+    dateType: 'solar' as 'solar' | 'lunar',
     type: 'countdown' as 'countdown' | 'anniversary',
     category: '节日',
     description: '',
@@ -19,8 +21,14 @@ const CreateEventPage: React.FC = () => {
     isShared: false
   });
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   const categories = ['节日', '爱情', '旅行', '工作', '学习', '生日', '纪念日', '其他'];
   const reminderOptions = ['无提醒', '当天', '1天前', '3天前', '1周前', '1个月前'];
+
+  const handleDateSelect = (date: string, dateType: 'solar' | 'lunar') => {
+    setFormData(prev => ({ ...prev, date, dateType }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,13 +130,25 @@ const CreateEventPage: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-warm-700 mb-2">日期 *</label>
-            <input
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
-              className="time-input"
-              required
-            />
+            <button
+              type="button"
+              onClick={() => setIsDatePickerOpen(true)}
+              className="time-input w-full text-left flex items-center justify-between"
+            >
+              <span className={formData.date ? 'text-warm-800' : 'text-warm-400'}>
+                {formData.date ? (
+                  <>
+                    {formData.date} 
+                    <span className="ml-2 text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full">
+                      {formData.dateType === 'lunar' ? '农历' : '公历'}
+                    </span>
+                  </>
+                ) : (
+                  '请选择日期'
+                )}
+              </span>
+              <Calendar size={16} className="text-warm-400" />
+            </button>
           </div>
 
           <div>
@@ -252,6 +272,15 @@ const CreateEventPage: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* 日期选择器模态框 */}
+      <DatePickerModal
+        isOpen={isDatePickerOpen}
+        onClose={() => setIsDatePickerOpen(false)}
+        onDateSelect={handleDateSelect}
+        initialDate={formData.date}
+        initialDateType={formData.dateType}
+      />
     </div>
   );
 };
